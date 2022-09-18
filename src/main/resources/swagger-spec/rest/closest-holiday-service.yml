@@ -1,0 +1,32 @@
+openapi: 3.0.1
+info:
+  title: Closest Holiday Service API
+  description: API to find closest Holiday
+  version: 0.0.1
+servers:
+  - url: https://localhost:50000
+    description: The server
+tags:
+  - name: holiday
+paths:
+
+  /holidays:
+    post:
+      tags:
+        - holiday
+      summary: Find Closest Holiday of the calendar year
+      operationId: getClosestHoliday
+      requestBody:
+        content:
+          application/json:
+            schema:
+
+      responses:
+        200:
+          description:
+          content:
+            application/json:
+              schema:
+
+components:
+  schemas:

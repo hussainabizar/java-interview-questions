@@ -8,11 +8,11 @@
         <version>2.7.2</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.example</groupId>
-    <artifactId>demo</artifactId>
+    <groupId>com.holiday.demo</groupId>
+    <artifactId>holiday-api</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>demo</name>
-    <description>Demo project for Spring Boot</description>
+    <name>holiday-api</name>
+    <description>Holiday Api Service</description>
 
     <properties>
         <java.version>17</java.version>
@@ -50,6 +50,7 @@
     </dependencies>
 
     <build>
+        <finalName>holiday-api</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>

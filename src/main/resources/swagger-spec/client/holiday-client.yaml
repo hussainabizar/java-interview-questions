@@ -1,0 +1,669 @@
+openapi: 3.0.3
+
+info:
+  title: 'Holiday API'
+  description: 'Holidays are hard. We make them easy.'
+  termsOfService: 'https://holidayapi.com/terms'
+  contact:
+    name: 'Holiday API'
+    email: 'hello@holidayapi.com'
+  version: '1.0'
+
+servers:
+  - url: 'https://holidayapi.com/v1'
+    description: 'Holiday API v1'
+
+paths:
+  /v1/holidays:
+    get:
+      description: 'List Holidays'
+      summary: 'Retrieves a list public holidays and observances for countries, states and provinces.'
+      externalDocs:
+        description: 'Developer Documentation'
+        url: 'https://holidayapi.com/docs'
+      parameters:
+        - name: key
+          description: 'Your API key.'
+          required: true
+          in: query
+          schema:
+            type: string
+            format: uuid
+          example: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
+        - name: country
+          description: 'For countries, ISO 3166-1 alpha-2 or ISO 3166-1 alpha-3 format. For subdivisions, ISO 3166-2 format. Accepts up to 10 comma separated values.'
+          required: true
+          in: query
+          schema:
+            type: string
+          example: US
+        - name: year
+          description: 'ISO 8601 format'
+          required: true
+          in: query
+          schema:
+            type: integer
+            format: int32
+          example: 2015
+        - name: month
+          description: '1 or 2 digit month (1-12)'
+          required: false
+          in: query
+          schema:
+            type: integer
+            format: int32
+          example: 7
+        - name: day
+          description: '1 or 2 digit day (1-31 depending on the month). Must be used with month.'
+          required: false
+          in: query
+          schema:
+            type: integer
+            format: int32
+          example: 4
+        - name: public
+          description: 'Return only public holidays.'
+          required: false
+          in: query
+          schema:
+            type: boolean
+            default: false
+          example: true
+        - name: subdivisions
+          description: 'Return state / province holidays alongside countrywide holidays. Available on our States & Provinces plan.'
+          required: false
+          in: query
+          schema:
+            type: boolean
+            default: false
+          example: true
+        - name: search
+          description: 'Search holidays by name.'
+          required: false
+          in: query
+          schema:
+            type: string
+            minimum: 5
+          example: 'Independence Day'
+        - name: language
+          description: 'ISO 639-1 format (with exceptions).'
+          required: false
+          in: query
+          schema:
+            type: string
+          example: en
+        - name: previous
+          description: 'Return the first day of holidays that occur before the specific date. month and day are required. Cannot be used with upcoming.'
+          required: false
+          in: query
+          schema:
+            type: boolean
+          example: true
+        - name: upcoming
+          description: 'Return the first day of holidays that occur after the specific date. month and day are required. Cannot be used with previous.'
+          required: false
+          in: query
+          schema:
+            type: boolean
+          example: true
+        - name: format
+          description: 'Response format.'
+          required: false
+          in: query
+          schema:
+            type: string
+            default: json
+            enum:
+              - csv
+              - json
+              - php
+              - tsv
+              - yaml
+              - xml
+          example: json
+        - name: pretty
+          description: 'Prettifies results to be more human-readable.'
+          required: false
+          in: query
+          schema:
+            type: boolean
+            default: false
+          example: true
+      responses:
+        '200':
+          description: 'Success! Everything is A-OK.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/holidays'
+
+  /v1/countries:
+    get:
+      description: 'List Countries'
+      summary: 'Retrieves a list countries with states and provinces.'
+      externalDocs:
+        description: 'Developer Documentation'
+        url: 'https://holidayapi.com/docs'
+      parameters:
+        - name: key
+          description: 'Your API key.'
+          required: true
+          in: query
+          schema:
+            type: string
+            format: uuid
+          example: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
+        - name: country
+          description: 'Return only the country with the specified code.'
+          required: false
+          in: query
+          schema:
+            type: string
+          example: US
+        - name: search
+          description: 'Search countries by code and name.'
+          required: false
+          in: query
+          schema:
+            type: string
+            minimum: 2
+          example: United
+        - name: public
+          description: 'Return only countries that have public holidays.'
+          required: false
+          in: query
+          schema:
+            type: boolean
+            default: false
+          example: true
+        - name: format
+          description: 'Response format.'
+          required: false
+          in: query
+          schema:
+            type: string
+            default: json
+            enum:
+              - csv
+              - json
+              - php
+              - tsv
+              - yaml
+              - xml
+          example: json
+        - name: pretty
+          description: 'Prettifies results to be more human-readable.'
+          required: false
+          in: query
+          schema:
+            type: boolean
+            default: false
+          example: true
+      responses:
+        '200':
+          description: 'Success! Everything is A-OK.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/countries'
+
+  /v1/languages:
+    get:
+      description: 'List Languages'
+      summary: 'Retrieves a list languages.'
+      externalDocs:
+        description: 'Developer Documentation'
+        url: 'https://holidayapi.com/docs'
+      parameters:
+        - name: key
+          description: 'Your API key.'
+          required: true
+          in: query
+          schema:
+            type: string
+            format: uuid
+          example: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
+        - name: language
+          description: 'Return only the languages with the specified code.'
+          required: false
+          in: query
+          schema:
+            type: string
+          example: US
+        - name: search
+          description: 'Search languages by code and name.'
+          required: false
+          in: query
+          schema:
+            type: string
+            minimum: 2
+          example: United
+        - name: format
+          description: 'Response format.'
+          required: false
+          in: query
+          schema:
+            type: string
+            default: json
+            enum:
+              - csv
+              - json
+              - php
+              - tsv
+              - yaml
+              - xml
+          example: json
+        - name: pretty
+          description: 'Prettifies results to be more human-readable.'
+          required: false
+          in: query
+          schema:
+            type: boolean
+            default: false
+          example: true
+      responses:
+        '200':
+          description: 'Success! Everything is A-OK.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/languages'
+
+  /v1/workday:
+    get:
+      description: 'Get Workday'
+      summary: "Calculates the workday (based on country's workweek) that occurs a given number of days after a date."
+      externalDocs:
+        description: 'Developer Documentation'
+        url: 'https://holidayapi.com/docs'
+      parameters:
+        - name: key
+          description: 'Your API key.'
+          required: true
+          in: query
+          schema:
+            type: string
+            format: uuid
+          example: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
+        - name: country
+          description: 'For countries, ISO 3166-1 alpha-2 or ISO 3166-1 alpha-3 format. For subdivisions, ISO 3166-2 format. Accepts up to 10 comma separated values.'
+          required: true
+          in: query
+          schema:
+            type: string
+          example: US
+        - name: start
+          description: 'The date (in YYYY-MM-DD format) from which to begin counting.'
+          required: true
+          in: query
+          schema:
+            type: string
+            format: date
+          example: '2015-07-01'
+        - name: days
+          description: 'Number of working / business days to advance (positive integer) or retrogress (negative integer) from start.'
+          required: true
+          in: query
+          schema:
+            type: integer
+            format: int32
+          example: 7
+        - name: format
+          description: 'Response format.'
+          required: false
+          in: query
+          schema:
+            type: string
+            default: json
+            enum:
+              - csv
+              - json
+              - php
+              - tsv
+              - yaml
+              - xml
+          example: json
+        - name: pretty
+          description: 'Prettifies results to be more human-readable.'
+          required: false
+          in: query
+          schema:
+            type: boolean
+            default: false
+          example: true
+      responses:
+        '200':
+          description: 'Success! Everything is A-OK.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/workday'
+
+  /v1/workdays:
+    get:
+      description: 'Get Workdays'
+      summary: "Calculates the number of workdays (based on country's workweek) that occur between a given date range."
+      externalDocs:
+        description: 'Developer Documentation'
+        url: 'https://holidayapi.com/docs'
+      parameters:
+        - name: key
+          description: 'Your API key.'
+          required: true
+          in: query
+          schema:
+            type: string
+            format: uuid
+          example: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
+        - name: country
+          description: 'For countries, ISO 3166-1 alpha-2 or ISO 3166-1 alpha-3 format. For subdivisions, ISO 3166-2 format. Accepts up to 10 comma separated values.'
+          required: true
+          in: query
+          schema:
+            type: string
+          example: US
+        - name: start
+          description: 'The date (in YYYY-MM-DD format) from which to begin counting.'
+          required: true
+          in: query
+          schema:
+            type: string
+            format: date
+          example: '2015-07-01'
+        - name: end
+          description: 'The date (in YYYY-MM-DD format) to count until.'
+          required: true
+          in: query
+          schema:
+            type: string
+            format: date
+          example: '2015-07-10'
+        - name: format
+          description: 'Response format.'
+          required: false
+          in: query
+          schema:
+            type: string
+            default: json
+            enum:
+              - csv
+              - json
+              - php
+              - tsv
+              - yaml
+              - xml
+          example: json
+        - name: pretty
+          description: 'Prettifies results to be more human-readable.'
+          required: false
+          in: query
+          schema:
+            type: boolean
+            default: false
+          example: true
+      responses:
+        '200':
+          description: 'Success! Everything is A-OK.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/workdays'
+
+components:
+  schemas:
+    response:
+      type: object
+      required:
+        - status
+        - requests
+      properties:
+        status:
+          type: integer
+          format: int32
+          example: 200
+        requests:
+          type: object
+          required:
+            - used
+            - available
+            - resets
+          properties:
+            used:
+              type: integer
+              format: int32
+              example: 136
+            available:
+              type: integer
+              format: int32
+              example: 864
+            resets:
+              type: string
+              example: '2019-09-01 00:00:00'
+        error:
+          type: string
+          example: 'An error has occurred.'
+        warning:
+          type: string
+          example: 'An warning has occurred.'
+
+    weekday:
+      type: object
+      required:
+        - date
+        - observed
+      properties:
+        date:
+          type: object
+          required:
+            - name
+            - numeric
+          properties:
+            name:
+              type: string
+              example: 'Saturday'
+            numeric:
+              type: integer
+              format: int32
+              example: 6
+        observed:
+          type: object
+          required:
+            - name
+            - numeric
+          properties:
+            name:
+              type: string
+              example: 'Friday'
+            numeric:
+              type: integer
+              format: int32
+              example: 5
+
+    holiday:
+      type: object
+      required:
+        - name
+        - date
+        - observed
+        - public
+        - country
+        - uuid
+        - weekday
+      properties:
+        name:
+          type: string
+          example: 'Independence Day'
+        date:
+          type: string
+          format: date
+          example: '2015-07-04'
+        observed:
+          type: string
+          format: date
+          example: '2015-07-03'
+        public:
+          type: boolean
+          example: true
+        country:
+          type: string
+          example: US
+        uuid:
+          type: string
+          format: uuid
+          example: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
+        weekday:
+          $ref: '#/components/schemas/weekday'
+        subdivisions:
+          type: array
+          items:
+            type: string
+            example:
+              - 'US-FL'
+              - 'US-TX'
+
+    country:
+      type: object
+      required:
+        - code
+        - name
+        - codes
+        - languages
+        - flag
+        - subdivisions
+      properties:
+        code:
+          type: string
+          example: US
+        name:
+          type: string
+          example: United States of America
+        codes:
+          type: object
+          required:
+            - 'alpha-2'
+            - 'alpha-3'
+            - numeric
+          properties:
+            alpha-2:
+              type: string
+              minimum: 2
+              maximum: 2
+              example: US
+            alpha-3:
+              type: string
+              minimum: 3
+              maximum: 3
+              example: USA
+            numeric:
+              type: integer
+              format: int32
+              example: 840
+        languages:
+          type: array
+          items:
+            type: string
+            minimum: 2
+            example:
+              - en
+        flag:
+          type: string
+          example: https://holidayapi.com/images/flags/64/us.png
+        subdivisions:
+          type: array
+          items:
+            type: object
+            required:
+              - code
+              - name
+              - languages
+            properties:
+              code:
+                type: string
+                minimum: 3
+                example: US-TX
+              name:
+                type: string
+                example: Texas
+              languages:
+                type: array
+                items:
+                  type: string
+                  minimum: 2
+                  example:
+                    - en
+
+    language:
+      type: object
+      required:
+        - code
+        - name
+      properties:
+        code:
+          type: string
+          example: en
+        name:
+          type: string
+          example: 'English'
+
+    holidays:
+      allOf:
+        - $ref: '#/components/schemas/response'
+        - type: object
+          required:
+            - holidays
+          properties:
+            holidays:
+              type: array
+              items:
+                $ref: '#/components/schemas/holiday'
+
+    countries:
+      allOf:
+        - $ref: '#/components/schemas/response'
+        - type: object
+          required:
+            - countries
+          properties:
+            countries:
+              type: array
+              items:
+                $ref: '#/components/schemas/country'
+
+    languages:
+      allOf:
+        - $ref: '#/components/schemas/response'
+        - type: object
+          required:
+            - languages
+          properties:
+            countries:
+              type: array
+              items:
+                $ref: '#/components/schemas/language'
+
+    workday:
+      allOf:
+        - $ref: '#/components/schemas/response'
+        - type: object
+          required:
+            - date
+            - weekday
+          properties:
+            date:
+              type: string
+              format: date
+              example: '2015-07-13'
+            weekday:
+              $ref: '#/components/schemas/weekday'
+
+    workdays:
+      allOf:
+        - $ref: '#/components/schemas/response'
+        - type: object
+          required:
+            - workdays
+          properties:
+            date:
+              type: integer
+              format: int32
+              example: 10

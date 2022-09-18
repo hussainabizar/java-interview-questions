@@ -1,4 +1,4 @@
-package com.example.demo.persistence;
+package com.holiday.demo.persistence;
 
 import lombok.Data;
 
