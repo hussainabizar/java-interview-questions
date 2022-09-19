@@ -4,23 +4,31 @@ import com.holiday.demo.client.api.HolidaysApi;
 import com.holiday.demo.client.model.Holidays;
 import com.holiday.demo.core.dto.HolidayDetails;
 import com.holiday.demo.core.mapper.HolidayMapper;
-import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
 @Component
-@AllArgsConstructor
 public class HolidayClientProvider {
+
+    @Value("${backbase.holiday_client_key}")
+    private String apiKey;
 
     HolidaysApi holidaysApi;
     HolidayMapper holidayMapper;
 
-    public List<HolidayDetails> getHolidays(String countryCode, LocalDate inputDate){
+    @Autowired
+    HolidayClientProvider(HolidaysApi holidaysApi, HolidayMapper holidayMapper){
+        this.holidaysApi = holidaysApi;
+        this.holidayMapper = holidayMapper;
+    }
+
+    public List<HolidayDetails> getHolidays(String countryCode, int year){
         try {
-            Holidays holidays = holidaysApi.getHolidays(UUID.fromString("81fbe33f-28b5-4754-b98c-4bf5a6595637"), countryCode, inputDate.getYear(), null, null,
+            Holidays holidays = holidaysApi.getHolidays(UUID.fromString(apiKey), countryCode, year, null, null,
                     null, true, null, null, null, null, null, null);
             return holidayMapper.mapHolidayDetails(holidays.getHolidays());
         }catch (Exception ex){

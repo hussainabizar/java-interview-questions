@@ -10,7 +10,7 @@ tags:
   - name: holiday
 paths:
 
-  /demo/holiday:
+  /holiday:
     get:
       tags:
         - holiday
@@ -18,6 +18,13 @@ paths:
       summary: 'Returns the closest holiday for the provided date'
       operationId: getClosestHoliday
       parameters:
+        - name: requestId
+          description: Session Id or Request Id
+          required: false
+          in: header
+          schema:
+            type: string
+          example: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
         - name: country
           description: 'For countries, ISO 3166-1 alpha-2 or ISO 3166-1 alpha-3 format. For subdivisions, ISO 3166-2 format. Accepts up to 10 comma separated values.'
           required: true

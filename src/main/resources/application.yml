@@ -19,4 +19,5 @@ spring:
 
 backbase:
   my_secret: ${MY_SECRET:my yaml secret}
+  holiday_client_key: ${HOLIDAY_CLIENT_KEY:81fbe33f-28b5-4754-b98c-4bf5a6595637}
 
