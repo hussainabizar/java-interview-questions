@@ -1,4 +1,4 @@
-package com.holiday.demo.controller;
+package com.holiday.demo.rest.controller;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;

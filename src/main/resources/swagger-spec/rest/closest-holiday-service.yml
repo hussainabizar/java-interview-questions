@@ -10,23 +10,46 @@ tags:
   - name: holiday
 paths:
 
-  /holidays:
-    post:
+  /demo/holiday:
+    get:
       tags:
         - holiday
-      summary: Find Closest Holiday of the calendar year
+      description: 'Return closest holiday'
+      summary: 'Returns the closest holiday for the provided date'
       operationId: getClosestHoliday
-      requestBody:
-        content:
-          application/json:
-            schema:
-
+      parameters:
+        - name: country
+          description: 'For countries, ISO 3166-1 alpha-2 or ISO 3166-1 alpha-3 format. For subdivisions, ISO 3166-2 format. Accepts up to 10 comma separated values.'
+          required: true
+          in: query
+          schema:
+            type: string
+          example: US
+        - name: date
+          description: 'Input date near which a holiday has to be searched'
+          required: false
+          in: query
+          schema:
+            type: string
+            format: date
+            example: '2015-07-04'
       responses:
-        200:
-          description:
+        '200':
+          description: 'Success! Everything is A-OK.'
           content:
             application/json:
               schema:
+                $ref: '#/components/schemas/Holiday'
 
 components:
   schemas:
+    Holiday:
+      type: object
+      properties:
+        nearestHolidayDate:
+          type: string
+          format: date
+          example: '2021-12-25'
+        holidayName:
+          type: string
+          example: 'Christmas Day'

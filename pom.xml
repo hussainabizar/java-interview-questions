@@ -47,6 +47,37 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.openapitools/openapi-generator -->
+        <dependency>
+            <groupId>org.openapitools</groupId>
+            <artifactId>openapi-generator</artifactId>
+            <version>6.1.0</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.openapitools/openapi-generator-maven-plugin -->
+        <dependency>
+            <groupId>org.openapitools</groupId>
+            <artifactId>openapi-generator-maven-plugin</artifactId>
+            <version>6.1.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.openapitools</groupId>
+            <artifactId>jackson-databind-nullable</artifactId>
+            <version>0.2.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct</artifactId>
+            <version>1.4.1.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct-processor</artifactId>
+            <version>1.4.1.Final</version>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -56,6 +87,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
+                    <mainClass>com.holiday.demo.HolidayApplication</mainClass>
                     <excludes>
                         <exclude>
                             <groupId>org.projectlombok</groupId>
@@ -66,5 +98,71 @@
             </plugin>
         </plugins>
     </build>
-</project>
 
+    <profiles>
+        <profile>
+            <id>srcGen</id>
+            <build>
+                <defaultGoal>generate-sources</defaultGoal>
+                <plugins>
+                    <plugin>
+                        <groupId>org.openapitools</groupId>
+                        <artifactId>openapi-generator-maven-plugin</artifactId>
+                        <version>6.1.0</version>
+                        <configuration>
+                            <skip>false</skip>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>generate-service-api</id>
+                                <goals>
+                                    <goal>generate</goal>
+                                </goals>
+                                <configuration>
+                                    <inputSpec>${project.basedir}/src/main/resources/swagger-spec/rest/closest-holiday-service.yml</inputSpec>
+                                    <generatorName>spring</generatorName>
+                                    <library>spring-boot</library>
+                                    <generateApis>true</generateApis>
+                                    <generateApiTests>false</generateApiTests>
+                                    <generateApiDocumentation>false</generateApiDocumentation>
+                                    <output>${project.basedir}</output>
+                                    <generateModels>true</generateModels>
+                                    <generateModelTests>false</generateModelTests>
+                                    <apiPackage>com.holiday.demo.rest.representation</apiPackage>
+                                    <modelPackage>com.holiday.demo.model</modelPackage>
+                                </configuration>
+                            </execution>
+
+                            <execution>
+                                <id>generate-client-api</id>
+                                <goals>
+                                    <goal>generate</goal>
+                                </goals>
+                                <configuration>
+                                    <inputSpec>${project.basedir}/src/main/resources/swagger-spec/client/holiday-client.yml</inputSpec>
+                                    <generatorName>java</generatorName>
+                                    <library>native</library>
+                                    <generateApis>true</generateApis>
+                                    <generateApiTests>false</generateApiTests>
+                                    <generateApiDocumentation>false</generateApiDocumentation>
+                                    <output>${project.basedir}</output>
+                                    <generateModels>true</generateModels>
+                                    <generateModelTests>false</generateModelTests>
+                                    <apiPackage>com.holiday.demo.client.api</apiPackage>
+                                    <invokerPackage>com.holiday.demo.client.api</invokerPackage>
+                                    <modelPackage>com.holiday.demo.client.model</modelPackage>
+                                    <configOptions>
+                                        <interfaceOnly>true</interfaceOnly>
+                                        <delegatePattern>true</delegatePattern>
+                                        <!--<configPackage>com.holiday.demo.client.config.gen</configPackage>-->
+                                    </configOptions>
+                                </configuration>
+                            </execution>
+                        </executions>
+
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+</project>

@@ -1,4 +1,4 @@
-openapi: 3.0.3
+openapi: 3.0.1
 
 info:
   title: 'Holiday API'
@@ -16,6 +16,9 @@ servers:
 paths:
   /v1/holidays:
     get:
+      tags:
+        - Holidays
+      operationId: getHolidays
       description: 'List Holidays'
       summary: 'Retrieves a list public holidays and observances for countries, states and provinces.'
       externalDocs:
