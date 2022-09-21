@@ -9,6 +9,7 @@ import com.holiday.demo.core.mapper.HolidayMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -32,6 +33,7 @@ public class HolidayClientProvider {
         this.errorManager = errorManager;
     }
 
+    @Cacheable(cacheNames = "holidays", key = "#year", unless = "#result == null || #result.isEmpty()")
     public List<HolidayDetails> getHolidays(String requestId, String countryCode, int year) throws ProviderException{
         try {
             Holidays holidays = holidaysApi.getHolidays(UUID.fromString(apiKey), countryCode, year, null, null,
