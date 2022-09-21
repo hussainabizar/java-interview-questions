@@ -77,6 +77,14 @@
             <artifactId>mapstruct-processor</artifactId>
             <version>1.4.1.Final</version>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
 
     </dependencies>
 
@@ -130,6 +138,9 @@
                                     <generateModelTests>false</generateModelTests>
                                     <apiPackage>com.holiday.demo.rest.representation</apiPackage>
                                     <modelPackage>com.holiday.demo.model</modelPackage>
+                                    <configOptions>
+                                        <additionalModelTypeAnnotations>@lombok.Builder @lombok.NoArgsConstructor @lombok.AllArgsConstructor</additionalModelTypeAnnotations>
+                                    </configOptions>
                                 </configuration>
                             </execution>
 

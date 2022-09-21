@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 import java.time.LocalDate;
 import java.util.Optional;
 
-@AllArgsConstructor
 @Slf4j
+@AllArgsConstructor
 @RestController
 @RequestMapping("/backbase/v1")
 public class HolidayController implements HolidayApi {
@@ -22,8 +22,15 @@ public class HolidayController implements HolidayApi {
     HolidayService holidayService;
 
     @Override
-    public ResponseEntity<Holiday> getClosestHoliday(String countryCode, String requestId, LocalDate inputDate){
-        return new ResponseEntity<>(holidayService.getNearestHoliday(requestId, countryCode, Optional.ofNullable(inputDate)), HttpStatus.OK);
+    public ResponseEntity<Holiday> getClosestHoliday(String apikey, String countryCode, String requestId, LocalDate inputDate){
+        Optional<Holiday> response;
+        response = Optional.of(holidayService.getNearestHoliday(requestId, countryCode, Optional.ofNullable(inputDate)));
+        return response.map(this::sendResponseBack).orElseGet(() -> sendResponseBack(null));
+    }
+
+    private <T> ResponseEntity<T> sendResponseBack(T response){
+        HttpStatus httpStatus = response !=null ? HttpStatus.OK : HttpStatus.INTERNAL_SERVER_ERROR;
+        return new ResponseEntity<>(response, httpStatus);
     }
 
 }
